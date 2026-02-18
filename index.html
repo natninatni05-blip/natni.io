@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 6: On The Move ✈️ | Self-Learning Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .flashcard {
+            perspective: 1000px;
+            height: 400px;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .flashcard-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .drag-item {
+            cursor: grab;
+            transition: all 0.3s ease;
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+        }
+
+        .drop-zone {
+            transition: all 0.3s ease;
+            border: 3px dashed #cbd5e1;
+        }
+
+        .drop-zone.drag-over {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            transform: scale(1.02);
+        }
+
+        .drop-zone.correct {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            position: absolute;
+            animation: confetti-fall 3s linear forwards;
+            z-index: 9999;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .typing-indicator::after {
+            content: '...';
+            animation: typing 1.5s infinite;
+        }
+
+        @keyframes typing {
+            0%, 100% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+        }
+
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+
+        .achievement-badge {
+            animation: badge-pop 0.5s ease;
+        }
+
+        @keyframes badge-pop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+
+        .section-hidden {
+            display: none;
+        }
+
+        .section-visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-bubble {
+            position: relative;
+            padding: 1rem;
+            border-radius: 20px;
+            margin: 0.5rem 0;
+            max-width: 80%;
+        }
+
+        .chat-bubble.sent {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-bubble.received {
+            background: #e2e8f0;
+            color: #1e293b;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+
+        .pulse-ring {
+            position: absolute;
+            border-radius: 50%;
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.33); }
+            40%, 50% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        .word-bank-item {
+            transition: all 0.2s;
+        }
+
+        .word-bank-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .nav-item {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: white;
+            transition: width 0.3s;
+        }
+
+        .nav-item:hover::after {
+            width: 100%;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="smooth-scroll">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-plane-departure text-2xl text-indigo-600"></i>
+                    <span class="font-bold text-xl text-gray-800">Unit 6: On The Move</span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <button onclick="showSection('vocab')" class="nav-item text-gray-700 hover:text-indigo-600 font-medium transition">Vocab Zone 📚</button>
+                    <button onclick="showSection('story')" class="nav-item text-gray-700 hover:text-indigo-600 font-medium transition">Story Mode 📖</button>
+                    <button onclick="showSection('code')" class="nav-item text-gray-700 hover:text-indigo-600 font-medium transition">Code Cracker 🔓</button>
+                    <button onclick="showSection('grammar')" class="nav-item text-gray-700 hover:text-indigo-600 font-medium transition">Grammar Glow-Up ✨</button>
+                    <button onclick="showSection('quiz')" class="nav-item text-gray-700 hover:text-indigo-600 font-medium transition">Ultimate Quiz 🎯</button>
+                    <button onclick="showSection('project')" class="nav-item text-gray-700 hover:text-indigo-600 font-medium transition">Final Boss 🎨</button>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="achievement-count" class="bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-sm font-bold hidden">
+                        <i class="fas fa-trophy mr-1"></i> <span id="badge-count">0</span>/5
+                    </div>
+                    <button onclick="toggleStudyMode()" class="md:hidden text-gray-700">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass border-t">
+            <div class="px-4 pt-2 pb-4 space-y-2">
+                <button onclick="showSection('vocab')" class="block w-full text-left py-2 text-gray-700">Vocab Zone 📚</button>
+                <button onclick="showSection('story')" class="block w-full text-left py-2 text-gray-700">Story Mode 📖</button>
+                <button onclick="showSection('code')" class="block w-full text-left py-2 text-gray-700">Code Cracker 🔓</button>
+                <button onclick="showSection('grammar')" class="block w-full text-left py-2 text-gray-700">Grammar Glow-Up ✨</button>
+                <button onclick="showSection('quiz')" class="block w-full text-left py-2 text-gray-700">Ultimate Quiz 🎯</button>
+                <button onclick="showSection('project')" class="block w-full text-left py-2 text-gray-700">Final Boss 🎨</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-12 px-4">
+        <div class="max-w-4xl mx-auto text-center text-white">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 drop-shadow-lg">On The Move ✈️</h1>
+            <p class="text-xl md:text-2xl mb-8 opacity-90">Master Unit 6 like a main character. No cap, you've got this! 💪</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="showSection('vocab')" class="bg-white text-indigo-600 px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:transform hover:scale-105 transition transform">
+                    Start Learning <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+                <button onclick="showSection('study-mode')" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-indigo-600 transition">
+                    <i class="fas fa-headphones mr-2"></i> Study With Me
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievement Toast -->
+    <div id="achievement-toast" class="fixed top-20 right-4 bg-white rounded-2xl shadow-2xl p-4 transform translate-x-full transition-transform duration-500 z-50 max-w-sm border-l-4 border-yellow-400 hidden">
+        <div class="flex items-center space-x-3">
+            <div class="text-4xl">🏆</div>
+            <div>
+                <h4 class="font-bold text-gray-800">Achievement Unlocked!</h4>
+                <p id="achievement-text" class="text-sm text-gray-600">You did something amazing!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- VOCAB ZONE -->
+    <section id="vocab" class="section-hidden max-w-6xl mx-auto px-4 py-8">
+        <div class="glass rounded-3xl p-8 shadow-2xl mb-8">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 class="text-4xl font-bold gradient-text mb-2">Vocab Zone 📚</h2>
+                    <p class="text-gray-600">Real airport situations, real words. Click cards to flip!</p>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="prevCard()" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center transition">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span id="card-counter" class="flex items-center font-bold text-gray-700">1/13</span>
+                    <button onclick="nextCard()" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center transition">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flashcard max-w-md mx-auto" id="flashcard-container" onclick="flipCard()">
+                <div class="flashcard-inner" id="flashcard-inner">
+                    <!-- Front -->
+                    <div class="flashcard-front bg-white flex flex-col">
+                        <div class="h-64 overflow-hidden relative">
+                            <img id="vocab-image" src="" alt="Vocabulary" class="w-full h-full object-cover">
+                            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur rounded-full p-2 shadow-lg">
+                                <i class="fas fa-sync-alt text-indigo-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center items-center p-6">
+                            <h3 id="vocab-word" class="text-3xl font-bold text-gray-800 mb-2"></h3>
+                            <p class="text-gray-500 text-sm">Tap to see meaning</p>
+                        </div>
+                    </div>
+                    <!-- Back -->
+                    <div class="flashcard-back">
+                        <h3 id="vocab-word-back" class="text-3xl font-bold mb-2"></h3>
+                        <p id="vocab-indo" class="text-xl mb-4 opacity-90"></p>
+                        <div class="bg-white/20 rounded-xl p-4 mb-4 w-full">
+                            <p id="vocab-example" class="text-sm italic"></p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button onclick="event.stopPropagation(); speakText(document.getElementById('vocab-word').textContent)" class="bg-white text-indigo-600 px-4 py-2 rounded-full font-bold hover:shadow-lg transition">
+                                <i class="fas fa-volume-up mr-2"></i> Listen
+                            </button>
+                            <button onclick="event.stopPropagation(); copyToClipboard(document.getElementById('vocab-word').textContent)" class="bg-white/20 text-white px-4 py-2 rounded-full font-bold hover:bg-white/30 transition">
+                                <i class="fas fa-copy mr-2"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Translator Tool -->
+            <div class="mt-12 bg-indigo-50 rounded-2xl p-6">
+                <h3 class="text-2xl font-bold text-indigo-900 mb-4"><i class="fas fa-language mr-2"></i> Quick Translator 🔍</h3>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <input type="text" id="translate-input" placeholder="Type English word..." class="flex-1 px-4 py-3 rounded-xl border-2 border-indigo-200 focus:border-indigo-500 outline-none">
+                    <button onclick="translateWord()" class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-700 transition">
+                        Translate
+                    </button>
+                </div>
+                <div id="translate-result" class="mt-4 hidden">
+                    <div class="bg-white rounded-xl p-4 shadow-md">
+                        <p class="text-gray-600 text-sm">Indonesian:</p>
+                        <p id="translate-output" class="text-2xl font-bold text-indigo-900"></p>
+                        <button onclick="speakText(document.getElementById('translate-input').value)" class="mt-2 text-indigo-600 text-sm font-bold">
+                            <i class="fas fa-volume-up mr-1"></i> Listen
+                        </button>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">*Only works with Unit 6 vocabulary</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- STORY MODE -->
+    <section id="story" class="section-hidden max-w-4xl mx-auto px-4 py-8">
+        <div class="glass rounded-3xl p-8 shadow-2xl">
+            <h2 class="text-4xl font-bold gradient-text mb-6">Story Mode: "Lost!" 📖</h2>
+            
+            <div class="bg-gradient-to-r from-orange-100 to-pink-100 rounded-2xl p-6 mb-8 border-l-4 border-orange-400">
+                <div class="flex items-start space-x-4">
+                    <div class="text-4xl">📚</div>
+                    <div>
+                        <h3 class="font-bold text-orange-900 text-lg mb-2">Reading Task</h3>
+                        <p class="text-orange-800 mb-4">Read the story "Lost!" from your textbook (pages 94-95). Once you've read it, take the comprehension quiz below!</p>
+                        <div class="bg-white/50 rounded-lg p-4 text-sm text-orange-900">
+                            <p class="font-semibold mb-2">Story Summary Check:</p>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Two friends at the airport</li>
+                                <li>One gets lost in the terminal</li>
+                                <li>Problem with directions and timing</li>
+                                <li>How do they solve it?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="story-quiz" class="space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-md">
+                    <p class="font-bold text-gray-800 mb-3">1. Where does the story take place? 🌍</p>
+                    <div class="space-y-2">
+                        <button onclick="checkStoryAnswer(1, 'a', this)" class="story-option w-full text-left p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-400 transition" data-value="a">A) At a train station</button>
+                        <button onclick="checkStoryAnswer(1, 'b', this)" class="story-option w-full text-left p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-400 transition" data-value="b">B) At an airport terminal</button>
+                        <button onclick="checkStoryAnswer(1, 'c', this)" class="story-option w-full text-left p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-400 transition" data-value="c">C) At a bus stop</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-md">
+                    <p class="font-bold text-gray-800 mb-3">2. Why does one character get lost? 😰</p>
+                    <div class="space-y-2">
+                        <button onclick="checkStoryAnswer(2, 'a', this)" class="story-option w-full text-left p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-400 transition" data-value="a">A) They went to the wrong gate</button>
+                        <button onclick="checkStoryAnswer(2, 'b', this)" class="story-option w-full text-left p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-400 transition" data-value="b">B) They were looking at their phone</button>
+                        <button onclick="checkStoryAnswer(2, 'c', this)" class="story-option w-full text-left p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-400 transition" data-value="c">C) They went to buy food</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-md">
+                    <p class="font-bold text-gray-800 mb-3">3. How long have they been waiting? ⏰</p>
+                    <div class="space-y-2">
+                        <button onclick="checkStoryAnswer(3, 'a', this)" class="story-option w-full text-left p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-400 transition" data-value="a">A) For 30 minutes</button>
+                        <button onclick="checkStoryAnswer(3, 'b', this)" class="story-option w-full text-left p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-400 transition" data-value="b">B) For 2 hours</button>
+                        <button onclick="checkStoryAnswer(3, 'c', this)" class="story-option w-full text-left p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-400 transition" data-value="c">C) Since morning</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-md">
+                    <p class="font-bold text-gray-800 mb-3">4. What vocabulary from Unit 6 is used in the story? (Choose all that apply) 📝</p>
+                    <div class="space-y-2">
+                        <button onclick="toggleMultiAnswer(this)" class="multi-option w-full text-left p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-400 transition" data-value="departure">Departure gate</button>
+                        <button onclick="toggleMultiAnswer(this)" class="multi-option w-full text-left p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-400 transition" data-value="security">Security</button>
+                        <button onclick="toggleMultiAnswer(this)" class="multi-option w-full text-left p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-400 transition" data-value="customs">Customs</button>
+                        <button onclick="toggleMultiAnswer(this)" class="multi-option w-full text-left p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-400 transition" data-value="terminal">Terminal</button>
+                    </div>
+                    <button onclick="checkMultiAnswer()" class="mt-4 bg-indigo-600 text-white px-6 py-2 rounded-full font-bold hover:bg-indigo-700 transition">Check Answer</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-md">
+                    <p class="font-bold text-gray-800 mb-3">5. What is the problem in the story? 🎯</p>
+                    <textarea class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-indigo-500 outline-none" rows="3" placeholder="Type your answer here..."></textarea>
+                    <button onclick="showStoryFeedback()" class="mt-4 bg-green-500 text-white px-6 py-2 rounded-full font-bold hover:bg-green-600 transition">Submit Answer</button>
+                </div>
+            </div>
+
+            <div id="story-results" class="hidden mt-8 text-center">
+                <div class="text-6xl mb-4">🎉</div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Story Mode Complete!</h3>
+                <p class="text-gray-600 mb-4">You've finished reading "Lost!" and tested your comprehension!</p>
+                <button onclick="unlockAchievement('story')" class="bg-indigo-600 text-white px-8 py-3 rounded-full font-bold hover:bg-indigo-700 transition">Claim Achievement</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CODE CRACKER -->
+    <section id="code" class="section-hidden max-w-4xl mx-auto px-4 py-8">
+        <div class="glass rounded-3xl p-8 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-4xl font-bold gradient-text mb-2">Code Cracker 🔓</h2>
+                    <p class="text-gray-600">Drag and drop to arrange the airport journey correctly!</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-3xl font-bold text-indigo-600" id="timer">00:00</div>
+                    <p class="text-xs text-gray-500">Timer (Optional)</p>
+                </div>
+            </div>
+
+            <div class="bg-indigo-50 rounded-2xl p-6 mb-6">
+                <p class="text-center text-indigo-900 font-semibold mb-4">Arrange these steps in the correct order:</p>
+                <div class="flex flex-wrap justify-center gap-3" id="drag-container">
+                    <div class="drag-item bg-white px-6 py-3 rounded-full shadow-md border-2 border-indigo-200 cursor-grab active:cursor-grabbing" draggable="true" data-order="3">
+                        <i class="fas fa-building mr-2"></i>Terminal
+                    </div>
+                    <div class="drag-item bg-white px-6 py-3 rounded-full shadow-md border-2 border-indigo-200 cursor-grab active:cursor-grabbing" draggable="true" data-order="1">
+                        <i class="fas fa-parking mr-2"></i>Parking
+                    </div>
+                    <div class="drag-item bg-white px-6 py-3 rounded-full shadow-md border-2 border-indigo-200 cursor-grab active:cursor-grabbing" draggable="true" data-order="6">
+                        <i class="fas fa-plane-departure mr-2"></i>Departure Gate
+                    </div>
+                    <div class="drag-item bg-white px-6 py-3 rounded-full shadow-md border-2 border-indigo-200 cursor-grab active:cursor-grabbing" draggable="true" data-order="4">
+                        <i class="fas fa-ticket-alt mr-2"></i>Check-in
+                    </div>
+                    <div class="drag-item bg-white px-6 py-3 rounded-full shadow-md border-2 border-indigo-200 cursor-grab active:cursor-grabbing" draggable="true" data-order="2">
+                        <i class="fas fa-bus mr-2"></i>Bus
+                    </div>
+                    <div class="drag-item bg-white px-6 py-3 rounded-full shadow-md border-2 border-indigo-200 cursor-grab active:cursor-grabbing" draggable="true" data-order="5">
+                        <i class="fas fa-shield-alt mr-2"></i>Security
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-8" id="drop-zones">
+                <div class="drop-zone bg-white rounded-xl p-4 text-center min-h-[100px] flex items-center justify-center" data-accept="1">
+                    <span class="text-gray-400 text-sm">1. Start here</span>
+                </div>
+                <div class="drop-zone bg-white rounded-xl p-4 text-center min-h-[100px] flex items-center justify-center" data-accept="2">
+                    <span class="text-gray-400 text-sm">2. Next</span>
+                </div>
+                <div class="drop-zone bg-white rounded-xl p-4 text-center min-h-[100px] flex items-center justify-center" data-accept="3">
+                    <span class="text-gray-400 text-sm">3. Then</span>
+                </div>
+                <div class="drop-zone bg-white rounded-xl p-4 text-center min-h-[100px] flex items-center justify-center" data-accept="4">
+                    <span class="text-gray-400 text-sm">4. Continue</span>
+                </div>
+                <div class="drop-zone bg-white rounded-xl p-4 text-center min-h-[100px] flex items-center justify-center" data-accept="5">
+                    <span class="text-gray-400 text-sm">5. Almost</span>
+                </div>
+                <div class="drop-zone bg-white rounded-xl p-4 text-center min-h-[100px] flex items-center justify-center" data-accept="6">
+                    <span class="text-gray-400 text-sm">6. Final</span>
+                </div>
+            </div>
+
+            <div class="flex justify-center space-x-4">
+                <button onclick="checkCodeOrder()" class="bg-indigo-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-indigo-700 transition shadow-lg">
+                    Check Order ✓
+                </button>
+                <button onclick="resetCodeGame()" class="bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-bold hover:bg-gray-300 transition">
+                    Reset ↺
+                </button>
+                <button onclick="startTimer()" class="bg-green-500 text-white px-6 py-3 rounded-full font-bold hover:bg-green-600 transition">
+                    Start Timer ⏱️
+                </button>
+            </div>
+
+            <div id="code-feedback" class="mt-6 text-center hidden">
+                <p class="text-xl font-bold"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- GRAMMAR GLOW-UP -->
+    <section id="grammar" class="section-hidden max-w-4xl mx-auto px-4 py-8">
+        <div class="glass rounded-3xl p-8 shadow-2xl">
+            <h2 class="text-4xl font-bold gradient-text mb-6">Grammar Glow-Up ✨</h2>
+
+            <!-- Part 1: Present Perfect Progressive -->
+            <div class="mb-12">
+                <div class="bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-6 mb-6">
+                    <h3 class="text-2xl font-bold text-purple-900 mb-2">Part 1: Present Perfect Progressive</h3>
+                    <p class="text-purple-800">"I have been waiting" — Use for actions that started in the past and continue now!</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-md mb-6">
+                    <h4 class="font-bold text-gray-800 mb-4">For vs. Since ⏰</h4>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-blue-50 rounded-xl p-4">
+                            <p class="font-bold text-blue-900">FOR (duration)</p>
+                            <p class="text-sm text-blue-700">for 2 hours, for 5 minutes, for a long time</p>
+                        </div>
+                        <div class="bg-pink-50 rounded-xl p-4">
+                            <p class="font-bold text-pink-900">SINCE (starting point)</p>
+                            <p class="text-sm text-pink-700">since 9 AM, since Monday, since I arrived</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4" id="for-since-game">
+                        <div class="flex items-center justify-between bg-gray-50 rounded-xl p-4">
+                            <span class="font-medium">I have been studying ___ 3 hours.</span>
+                            <div class="space-x-2">
+                                <button onclick="checkForSince(this, 'for')" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-blue-500 hover:text-white transition">for</button>
+                                <button onclick="checkForSince(this, 'since')" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-blue-500 hover:text-white transition">since</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between bg-gray-50 rounded-xl p-4">
+                            <span class="font-medium">She has been waiting ___ morning.</span>
+                            <div class="space-x-2">
+                                <button onclick="checkForSince(this, 'for')" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-blue-500 hover:text-white transition">for</button>
+                                <button onclick="checkForSince(this, 'since')" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-blue-500 hover:text-white transition">since</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between bg-gray-50 rounded-xl p-4">
+                            <span class="font-medium">We have been standing here ___ 10 minutes.</span>
+                            <div class="space-x-2">
+                                <button onclick="checkForSince(this, 'for')" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-blue-500 hover:text-white transition">for</button>
+                                <button onclick="checkForSince(this, 'since')" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-blue-500 hover:text-white transition">since</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 2: Just/Already/Yet/Still -->
+            <div>
+                <div class="bg-gradient-to-r from-green-100 to-teal-100 rounded-2xl p-6 mb-6">
+                    <h3 class="text-2xl font-bold text-green-900 mb-2">Part 2: Just / Already / Yet / Still</h3>
+                    <p class="text-green-800">Complete the text message conversation! 💬</p>
+                </div>
+
+                <div class="bg-gray-100 rounded-3xl p-6 max-w-2xl mx-auto">
+                    <div class="space-y-4" id="chat-game">
+                        <!-- Message 1 -->
+                        <div class="chat-bubble received">
+                            <p>Have you arrived at the airport <select class="bg-transparent border-b-2 border-gray-400 outline-none font-bold" onchange="checkChatAnswer(this, 'yet')">
+                                <option value="">_____</option>
+                                <option value="just">just</option>
+                                <option value="already">already</option>
+                                <option value="yet">yet</option>
+                                <option value="still">still</option>
+                            </select>?</p>
+                            <span class="text-xs opacity-70 mt-1 block">2:30 PM</span>
+                        </div>
+
+                        <!-- Message 2 -->
+                        <div class="chat-bubble sent">
+                            <p>Yes, I've <select class="bg-transparent border-b-2 border-white outline-none font-bold bg-indigo-500" onchange="checkChatAnswer(this, 'already')">
+                                <option value="">_____</option>
+                                <option value="just">just</option>
+                                <option value="already">already</option>
+                                <option value="yet">yet</option>
+                                <option value="still">still</option>
+                            </select> arrived! I'm at the check-in counter.</p>
+                            <span class="text-xs opacity-70 mt-1 block">2:32 PM ✓</span>
+                        </div>
+
+                        <!-- Message 3 -->
+                        <div class="chat-bubble received">
+                            <p>Have you <select class="bg-transparent border-b-2 border-gray-400 outline-none font-bold" onchange="checkChatAnswer(this, 'already')">
+                                <option value="">_____</option>
+                                <option value="just">just</option>
+                                <option value="already">already</option>
+                                <option value="yet">yet</option>
+                                <option value="still">still</option>
+                            </select> gone through security?</p>
+                            <span class="text-xs opacity-70 mt-1 block">2:35 PM</span>
+                        </div>
+
+                        <!-- Message 4 -->
+                        <div class="chat-bubble sent">
+                            <p>No, I'm <select class="bg-transparent border-b-2 border-white outline-none font-bold bg-indigo-500" onchange="checkChatAnswer(this, 'still')">
+                                <option value="">_____</option>
+                                <option value="just">just</option>
+                                <option value="already">already</option>
+                                <option value="yet">yet</option>
+                                <option value="still">still</option>
+                            </select> waiting in line. It's so long! 😭</p>
+                            <span class="text-xs opacity-70 mt-1 block">2:36 PM ✓</span>
+                        </div>
+
+                        <!-- Message 5 -->
+                        <div class="chat-bubble sent">
+                            <p>I've <select class="bg-transparent border-b-2 border-white outline-none font-bold bg-indigo-500" onchange="checkChatAnswer(this, 'just')">
+                                <option value="">_____</option>
+                                <option value="just">just</option>
+                                <option value="already">already</option>
+                                <option value="yet">yet</option>
+                                <option value="still">still</option>
+                            </select> finished! Heading to the gate now.</p>
+                            <span class="text-xs opacity-70 mt-1 block">2:45 PM ✓</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <div class="typing-indicator text-gray-500 text-sm">Friend is typing</div>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <button onclick="checkGrammarComplete()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-full font-bold text-lg hover:shadow-xl transition transform hover:scale-105">
+                        Check Grammar Mastery ✨
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ULTIMATE QUIZ -->
+    <section id="quiz" class="section-hidden max-w-3xl mx-auto px-4 py-8">
+        <div class="glass rounded-3xl p-8 shadow-2xl">
+            <h2 class="text-4xl font-bold gradient-text mb-2">The Ultimate Quiz 🎯</h2>
+            <p class="text-gray-600 mb-6">Test your Unit 6 knowledge! 12 questions, no pressure bestie!</p>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 rounded-full h-4 mb-8">
+                <div id="quiz-progress" class="progress-bar bg-gradient-to-r from-indigo-500 to-purple-500 h-4 rounded-full" style="width: 0%"></div>
+            </div>
+            <p class="text-right text-sm text-gray-600 mb-4">Question <span id="current-q">1</span>/12</p>
+
+            <div id="quiz-container">
+                <!-- Questions will be injected here -->
+            </div>
+
+            <div id="quiz-results" class="hidden text-center py-12">
+                <div class="text-6xl mb-4" id="result-emoji">🎉</div>
+                <h3 class="text-3xl font-bold text-gray-800 mb-2" id="result-title">Quiz Complete!</h3>
+                <p class="text-xl text-gray-600 mb-4">You scored <span id="score-display" class="font-bold text-indigo-600 text-2xl">0</span>/12</p>
+                <p id="result-message" class="text-lg text-gray-700 mb-6 font-medium"></p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="retryMissed()" class="bg-indigo-600 text-white px-6 py-3 rounded-full font-bold hover:bg-indigo-700 transition">
+                        Retry Missed Questions 🔄
+                    </button>
+                    <button onclick="resetQuiz()" class="bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-bold hover:bg-gray-300 transition">
+                        Start Over ↺
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL BOSS -->
+    <section id="project" class="section-hidden max-w-4xl mx-auto px-4 py-8">
+        <div class="glass rounded-3xl p-8 shadow-2xl">
+            <h2 class="text-4xl font-bold gradient-text mb-2">Final Boss: Creative Project 🎨</h2>
+            <p class="text-gray-600 mb-6">Write your own airport drama! Time to show off your skills!</p>
+
+            <div class="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-2xl p-6 mb-6 border-l-4 border-yellow-400">
+                <h3 class="font-bold text-yellow-900 text-lg mb-2">Mission Requirements:</h3>
+                <ul class="space-y-2 text-yellow-800">
+                    <li class="flex items-center"><i class="fas fa-check-circle mr-2"></i> Write 8-10 sentences</li>
+                    <li class="flex items-center"><i class="fas fa-check-circle mr-2"></i> Use 5+ vocabulary words from Unit 6</li>
+                    <li class="flex items-center"><i class="fas fa-check-circle mr-2"></i> Include Present Perfect Progressive ("I have been waiting")</li>
+                    <li class="flex items-center"><i class="fas fa-check-circle mr-2"></i> Use just/already/yet/still</li>
+                    <li class="flex items-center"><i class="fas fa-check-circle mr-2"></i> Include a problem and solution</li>
+                </ul>
+            </div>
+
+            <div class="mb-6">
+                <h4 class="font-bold text-gray-800 mb-3">Word Bank (Click to insert):</h4>
+                <div class="flex flex-wrap gap-2" id="word-bank">
+                    <button onclick="insertWord('check-in')" class="word-bank-item bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">check-in</button>
+                    <button onclick="insertWord('departure gate')" class="word-bank-item bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">departure gate</button>
+                    <button onclick="insertWord('security')" class="word-bank-item bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">security</button>
+                    <button onclick="insertWord('baggage claim')" class="word-bank-item bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">baggage claim</button>
+                    <button onclick="insertWord('terminal')" class="word-bank-item bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">terminal</button>
+                    <button onclick="insertWord('passport')" class="word-bank-item bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">passport</button>
+                    <button onclick="insertWord('customs')" class="word-bank-item bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">customs</button>
+                    <button onclick="insertWord('arrivals')" class="word-bank-item bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">arrivals</button>
+                    <button onclick="insertWord('take off')" class="word-bank-item bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">take off</button>
+                    <button onclick="insertWord('land')" class="word-bank-item bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">land</button>
+                    <button onclick="insertWord('I have been waiting')" class="word-bank-item bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm font-medium">I have been waiting</button>
+                    <button onclick="insertWord('already')" class="word-bank-item bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm font-medium">already</button>
+                    <button onclick="insertWord('yet')" class="word-bank-item bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm font-medium">yet</button>
+                    <button onclick="insertWord('still')" class="word-bank-item bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm font-medium">still</button>
+                    <button onclick="insertWord('just')" class="word-bank-item bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm font-medium">just</button>
+                </div>
+            </div>
+
+            <div class="relative">
+                <textarea id="story-editor" class="w-full h-64 p-6 border-2 border-gray-200 rounded-2xl focus:border-indigo-500 outline-none text-lg resize-none" placeholder="Start your airport drama here... Example: 'I have been waiting at the check-in counter for 30 minutes...'"></textarea>
+                <div class="absolute bottom-4 right-4 bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-600">
+                    Words: <span id="word-count">0</span>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap gap-4 mt-6">
+                <button onclick="saveStory()" class="bg-green-500 text-white px-8 py-3 rounded-full font-bold hover:bg-green-600 transition flex items-center">
+                    <i class="fas fa-save mr-2"></i> Save Story
+                </button>
+                <button onclick="downloadStory()" class="bg-indigo-600 text-white px-8 py-3 rounded-full font-bold hover:bg-indigo-700 transition flex items-center">
+                    <i class="fas fa-download mr-2"></i> Download as File
+                </button>
+                <button onclick="checkRequirements()" class="bg-yellow-500 text-white px-8 py-3 rounded-full font-bold hover:bg-yellow-600 transition flex items-center">
+                    <i class="fas fa-check-circle mr-2"></i> Check Requirements
+                </button>
+            </div>
+
+            <div id="save-notification" class="hidden mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl text-center">
+                <i class="fas fa-check-circle mr-2"></i> Story saved successfully! ✨
+            </div>
+
+            <div id="req-check" class="hidden mt-4 bg-blue-50 rounded-xl p-4">
+                <h4 class="font-bold text-blue-900 mb-2">Requirements Check:</h4>
+                <ul class="space-y-1 text-sm" id="req-list"></ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- STUDY WITH ME MODE -->
+    <section id="study-mode" class="section-hidden max-w-2xl mx-auto px-4 py-8">
+        <div class="glass rounded-3xl p-8 shadow-2xl text-center">
+            <h2 class="text-4xl font-bold gradient-text mb-6">Study With Me Mode 🎧</h2>
+            
+            <div class="bg-indigo-50 rounded-2xl p-8 mb-6">
+                <div class="text-6xl mb-4">🎵</div>
+                <h3 class="text-2xl font-bold text-indigo-900 mb-2">Lo-Fi Beats to Study To</h3>
+                <p class="text-indigo-700 mb-4">Open these in a new tab for background focus music:</p>
+                <div class="space-y-3">
+                    <a href="https://www.youtube.com/watch?v=jfKfPfyJRdk" target="_blank" class="block bg-white rounded-xl p-4 hover:shadow-md transition text-left flex items-center">
+                        <i class="fab fa-youtube text-red-500 text-2xl mr-4"></i>
+                        <div>
+                            <p class="font-bold text-gray-800">Lofi Girl - Study Beats</p>
+                            <p class="text-sm text-gray-500">YouTube Live</p>
+                        </div>
+                    </a>
+                    <a href="https://open.spotify.com/playlist/37i9dQZF1DX8Uebhn9wzrS" target="_blank" class="block bg-white rounded-xl p-4 hover:shadow-md transition text-left flex items-center">
+                        <i class="fab fa-spotify text-green-500 text-2xl mr-4"></i>
+                        <div>
+                            <p class="font-bold text-gray-800">Peaceful Piano</p>
+                            <p class="text-sm text-gray-500">Spotify Playlist</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-8 shadow-md">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Pomodoro Timer 🍅</h3>
+                <div class="text-6xl font-bold text-indigo-600 mb-6" id="pomodoro-display">25:00</div>
+                <div class="flex justify-center gap-4">
+                    <button onclick="startPomodoro()" id="pomo-start" class="bg-green-500 text-white px-6 py-3 rounded-full font-bold hover:bg-green-600 transition">Start</button>
+                    <button onclick="pausePomodoro()" class="bg-yellow-500 text-white px-6 py-3 rounded-full font-bold hover:bg-yellow-600 transition">Pause</button>
+                    <button onclick="resetPomodoro()" class="bg-gray-500 text-white px-6 py-3 rounded-full font-bold hover:bg-gray-600 transition">Reset</button>
+                </div>
+                <p class="text-sm text-gray-500 mt-4">25 minutes study, 5 minutes break. You got this! 💪</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Vocabulary Data with Real Images
+        const vocabData = [
+            {
+                word: "Check-in",
+                indo: "Check-in / Loket check-in",
+                example: "We need to check-in at counter B5 before 10 AM.",
+                image: "https://thumbs.dreamstime.com/b/airport-check-counters-23521132.jpg"
+            },
+            {
+                word: "Departure Gate",
+                indo: "Gerbang keberangkatan",
+                example: "Our departure gate is A12. Don't be late!",
+                image: "https://c8.alamy.com/comp/WEGFT5/departures-gate-at-luton-airport-people-departing-and-saying-farewell-at-the-departure-gate-WEGFT5.jpg"
+            },
+            {
+                word: "Security",
+                indo: "Keamanan / Pemeriksaan keamanan",
+                example: "Please put your bag on the belt for security check.",
+                image: "https://stephpurk.com/wp-content/uploads/2021/02/Airport-Security-and-Customs-Tips-Blog-Banner.jpg"
+            },
+            {
+                word: "Baggage Claim",
+                indo: "Pengambilan bagasi",
+                example: "Wait at baggage claim carousel 3 for your suitcase.",
+                image: "https://upload.wikimedia.org/wikipedia/commons/4/49/Baggage_reclaim_hahn_airport.jpg"
+            },
+            {
+                word: "Terminal",
+                indo: "Terminal",
+                example: "Terminal 3 is for international flights only.",
+                image: "https://www.hntb.com/wp-content/uploads/2019/10/HNTB_Orlando-MCO-TerminalC_02172_first3-565x400-1.jpg"
+            },
+            {
+                word: "Parking",
+                indo: "Parkir",
+                example: "The parking lot is full. We need to find another spot.",
+                image: "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=800&h=600&fit=crop"
+            },
+            {
+                word: "Bus",
+                indo: "Bis / Bus",
+                example: "Take the shuttle bus from parking to the terminal.",
+                image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&h=600&fit=crop"
+            },
+            {
+                word: "Passport",
+                indo: "Paspor",
+                example: "Don't forget your passport at the check-in counter!",
+                image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop"
+            },
+            {
+                word: "Arrivals",
+                indo: "Kedatangan",
+                example: "I'll meet you at the arrivals hall near Starbucks.",
+                image: "https://www.airport.kr/sites/ap_en/images/sub/welcome-img01.jpg"
+            },
+            {
+                word: "Take Off",
+                indo: "Lepas landas / Berangkat",
+                example: "The plane will take off in 10 minutes. Buckle up!",
+                image: "https://www.shutterstock.com/image-photo/airplane-taking-off-airport-front-600nw-1322477222.jpg"
+            },
+            {
+                word: "Land",
+                indo: "Mendarat",
+                example: "We will land in Jakarta in approximately 30 minutes.",
+                image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=600&fit=crop"
+            },
+            {
+                word: "Customs",
+                indo: "Bea cukai",
+                example: "You must declare food items at customs.",
+                image: "https://static0.simpleflyingimages.com/wordpress/wp-content/uploads/2023/09/090819-h-cbpxx999-0003.jpg?q=50&fit=crop&w=825&dpr=1.5"
+            },
+            {
+                word: "Parking Lot",
+                indo: "Tempat parkir",
+                example: "My dad is waiting in the parking lot.",
+                image: "https://images.unsplash.com/photo-1590674899505-1c5c41947e9c?w=800&h=600&fit=crop"
+            }
+        ];
+
+        // Translator Dictionary
+        const translatorDict = {
+            "check-in": "Check-in / Loket check-in",
+            "departure gate": "Gerbang keberangkatan",
+            "security": "Keamanan / Pemeriksaan keamanan",
+            "baggage claim": "Pengambilan bagasi",
+            "terminal": "Terminal",
+            "parking": "Parkir",
+            "bus": "Bis / Bus",
+            "passport": "Paspor",
+            "arrivals": "Kedatangan",
+            "take off": "Lepas landas / Berangkat",
+            "land": "Mendarat",
+            "customs": "Bea cukai",
+            "parking lot": "Tempat parkir",
+            "check in": "Check-in",
+            "departure": "Keberangkatan"
+        };
+
+        // Quiz Data
+        const quizData = [
+            {
+                question: "Where do you go first when you arrive at the airport by car?",
+                options: ["Departure gate", "Parking", "Security", "Customs"],
+                correct: 1,
+                type: "vocab"
+            },
+            {
+                question: "I have been waiting ___ 2 hours.",
+                options: ["since", "for", "yet", "already"],
+                correct: 1,
+                type: "grammar"
+            },
+            {
+                question: "What do you need to show at the check-in counter?",
+                options: ["Your lunch", "Your passport", "Your shoes", "Your phone"],
+                correct: 1,
+                type: "vocab"
+            },
+            {
+                question: "Have you gone through security ___?",
+                options: ["already", "yet", "since", "for"],
+                correct: 1,
+                type: "grammar"
+            },
+            {
+                question: "Where do you get your suitcase after landing?",
+                options: ["Departure gate", "Baggage claim", "Parking lot", "Check-in"],
+                correct: 1,
+                type: "vocab"
+            },
+            {
+                question: "She has ___ arrived at the terminal.",
+                options: ["yet", "since", "already", "for"],
+                correct: 2,
+                type: "grammar"
+            },
+            {
+                question: "What happens after the plane leaves the ground?",
+                options: ["It lands", "It takes off", "It parks", "It checks in"],
+                correct: 1,
+                type: "vocab"
+            },
+            {
+                question: "I'm ___ waiting at the security checkpoint.",
+                options: ["already", "yet", "still", "for"],
+                correct: 2,
+                type: "grammar"
+            },
+            {
+                question: "In the story 'Lost!', where does the problem happen?",
+                options: ["At the restaurant", "In the terminal", "On the plane", "At home"],
+                correct: 1,
+                type: "story"
+            },
+            {
+                question: "I've ___ finished my check-in!",
+                options: ["just", "since", "for", "yet"],
+                correct: 0,
+                type: "grammar"
+            },
+            {
+                question: "Where do international passengers go through immigration?",
+                options: ["Departure gate", "Customs", "Parking", "Baggage claim"],
+                correct: 1,
+                type: "vocab"
+            },
+            {
+                question: "We have been standing in line ___ 9 AM.",
+                options: ["for", "since", "yet", "already"],
+                correct: 1,
+                type: "grammar"
+            }
+        ];
+
+        // State
+        let currentCard = 0;
+        let achievements = [];
+        let quizScore = 0;
+        let currentQuestion = 0;
+        let missedQuestions = [];
+        let timerInterval;
+        let seconds = 0;
+        let pomoInterval;
+        let pomoTime = 25 * 60;
+        let isPomoRunning = false;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCard(0);
+            initDragAndDrop();
+            showSection('vocab');
+        });
+
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(sec => {
+                sec.classList.add('section-hidden');
+                sec.classList.remove('section-visible');
+            });
+            document.getElementById(sectionId).classList.remove('section-hidden');
+            document.getElementById(sectionId).classList.add('section-visible');
+            window.scrollTo(0, 0);
+            
+            if (sectionId === 'quiz' && currentQuestion === 0) {
+                loadQuizQuestion();
+            }
+        }
+
+        function toggleStudyMode() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // Flashcard Functions
+        function loadCard(index) {
+            const card = vocabData[index];
+            document.getElementById('vocab-word').textContent = card.word;
+            document.getElementById('vocab-word-back').textContent = card.word;
+            document.getElementById('vocab-indo').textContent = card.indo;
+            document.getElementById('vocab-example').textContent = `"${card.example}"`;
+            document.getElementById('vocab-image').src = card.image;
+            document.getElementById('card-counter').textContent = `${index + 1}/${vocabData.length}`;
+            
+            // Remove flip class
+            document.getElementById('flashcard-container').classList.remove('flipped');
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard-container').classList.toggle('flipped');
+            if (!achievements.includes('first-vocab')) {
+                setTimeout(() => unlockAchievement('first-vocab'), 600);
+            }
+        }
+
+        function nextCard() {
+            currentCard = (currentCard + 1) % vocabData.length;
+            loadCard(currentCard);
+        }
+
+        function prevCard() {
+            currentCard = (currentCard - 1 + vocabData.length) % vocabData.length;
+            loadCard(currentCard);
+        }
+
+        // Text to Speech
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Sorry bestie, your browser doesn't support audio! 🔇");
+            }
+        }
+
+        // Copy to Clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`Copied "${text}" to clipboard! 📋`);
+            });
+        }
+
+        // Translator
+        function translateWord() {
+            const input = document.getElementById('translate-input').value.toLowerCase().trim();
+            const resultDiv = document.getElementById('translate-result');
+            const output = document.getElementById('translate-output');
+            
+            if (translatorDict[input]) {
+                output.textContent = translatorDict[input];
+                resultDiv.classList.remove('hidden');
+            } else {
+                output.textContent = "Not in Unit 6 vocab, bestie! Try: check-in, security, terminal...";
+                resultDiv.classList.remove('hidden');
+            }
+        }
+
+        // Drag and Drop Game
+        function initDragAndDrop() {
+            const dragItems = document.querySelectorAll('.drag-item');
+            const dropZones = document.querySelectorAll('.drop-zone');
+
+            dragItems.forEach(item => {
+                item.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', item.dataset.order);
+                    e.dataTransfer.setData('element', item.outerHTML);
+                    item.style.opacity = '0.5';
+                });
+
+                item.addEventListener('dragend', () => {
+                    item.style.opacity = '1';
+                });
+
+                // Touch support for mobile
+                item.addEventListener('touchstart', handleTouchStart, {passive: false});
+                item.addEventListener('touchmove', handleTouchMove, {passive: false});
+                item.addEventListener('touchend', handleTouchEnd);
+            });
+
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    zone.classList.add('drag-over');
+                });
+
+                zone.addEventListener('dragleave', () => {
+                    zone.classList.remove('drag-over');
+                });
+
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.classList.remove('drag-over');
+                    const order = e.dataTransfer.getData('text/plain');
+                    const html = e.dataTransfer.getData('element');
+                    
+                    if (zone.dataset.accept === order) {
+                        zone.innerHTML = html;
+                        zone.classList.add('correct');
+                        zone.querySelector('.drag-item').setAttribute('draggable', 'false');
+                    } else {
+                        zone.style.animation = 'shake 0.5s';
+                        setTimeout(() => zone.style.animation = '', 500);
+                    }
+                });
+            });
+        }
+
+        // Touch handlers for mobile drag and drop
+        let touchItem = null;
+        let touchOffset = {x: 0, y: 0};
+
+        function handleTouchStart(e) {
+            touchItem = e.target.closest('.drag-item');
+            const touch = e.touches[0];
+            const rect = touchItem.getBoundingClientRect();
+            touchOffset.x = touch.clientX - rect.left;
+            touchOffset.y = touch.clientY - rect.top;
+            touchItem.style.position = 'fixed';
+            touchItem.style.zIndex = '1000';
+            touchItem.style.width = rect.width + 'px';
+        }
+
+        function handleTouchMove(e) {
+            if (!touchItem) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            touchItem.style.left = (touch.clientX - touchOffset.x) + 'px';
+            touchItem.style.top = (touch.clientY - touchOffset.y) + 'px';
+        }
+
+        function handleTouchEnd(e) {
+            if (!touchItem) return;
+            const touch = e.changedTouches[0];
+            const dropZones = document.querySelectorAll('.drop-zone');
+            
+            dropZones.forEach(zone => {
+                const rect = zone.getBoundingClientRect();
+                if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+                    touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+                    const order = touchItem.dataset.order;
+                    if (zone.dataset.accept === order && !zone.classList.contains('correct')) {
+                        zone.innerHTML = touchItem.outerHTML;
+                        zone.classList.add('correct');
+                        touchItem.remove();
+                    }
+                }
+            });
+            
+            if (touchItem.parentElement.id === 'drag-container') {
+                touchItem.style.position = '';
+                touchItem.style.zIndex = '';
+                touchItem.style.left = '';
+                touchItem.style.top = '';
+                touchItem.style.width = '';
+            }
+            touchItem = null;
+        }
+
+        function checkCodeOrder() {
+            const correctZones = document.querySelectorAll('.drop-zone.correct');
+            const feedback = document.getElementById('code-feedback');
+            
+            if (correctZones.length === 6) {
+                feedback.innerHTML = '<span class="text-green-600 text-2xl">🎉 Correct! You cracked the code!</span>';
+                feedback.classList.remove('hidden');
+                createConfetti();
+                clearInterval(timerInterval);
+            } else {
+                feedback.innerHTML = '<span class="text-orange-500 text-xl">Almost, bestie! Try again! You got ' + correctZones.length + '/6 correct.</span>';
+                feedback.classList.remove('hidden');
+            }
+        }
+
+        function resetCodeGame() {
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.innerHTML = `<span class="text-gray-400 text-sm">${zone.dataset.accept}. ${zone.dataset.accept === '1' ? 'Start here' : zone.dataset.accept === '6' ? 'Final' : 'Next'}</span>`;
+                zone.classList.remove('correct');
+            });
+            document.getElementById('code-feedback').classList.add('hidden');
+            clearInterval(timerInterval);
+            seconds = 0;
+            document.getElementById('timer').textContent = '00:00';
+            initDragAndDrop();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            seconds = 0;
+            timerInterval = setInterval(() => {
+                seconds++;
+                const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+                const secs = (seconds % 60).toString().padStart(2, '0');
+                document.getElementById('timer').textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        // Grammar Games
+        function checkForSince(btn, correct) {
+            const parent = btn.parentElement.parentElement;
+            const selected = btn.textContent.trim();
+            
+            if (selected === correct) {
+                btn.className = 'px-4 py-2 rounded-lg bg-green-500 text-white font-bold';
+                parent.querySelectorAll('button').forEach(b => b.disabled = true);
+            } else {
+                btn.className = 'px-4 py-2 rounded-lg bg-red-500 text-white font-bold';
+                setTimeout(() => {
+                    btn.className = 'px-4 py-2 rounded-lg bg-gray-200 hover:bg-blue-500 hover:text-white transition';
+                }, 1000);
+            }
+        }
+
+        function checkChatAnswer(select, correct) {
+            if (select.value === correct) {
+                select.className = "bg-transparent border-b-2 border-green-500 outline-none font-bold text-green-600";
+                select.disabled = true;
+            } else {
+                select.className = "bg-transparent border-b-2 border-red-500 outline-none font-bold text-red-600";
+            }
+        }
+
+        function checkGrammarComplete() {
+            const correctAnswers = document.querySelectorAll('.border-green-500').length;
+            if (correctAnswers >= 5) {
+                unlockAchievement('grammar');
+                alert("Certified Grammar Guru! ✨ Main character energy!");
+            } else {
+                alert("Keep practicing, bestie! You're almost there! 💪");
+            }
+        }
+
+        // Story Quiz Functions
+        function checkStoryAnswer(qNum, answer, btn) {
+            const correctAnswers = {1: 'b', 2: 'a', 3: 'a'};
+            const parent = btn.parentElement;
+            
+            parent.querySelectorAll('button').forEach(b => {
+                b.disabled = true;
+                if (b.dataset.value === correctAnswers[qNum]) {
+                    b.classList.add('bg-green-500', 'text-white', 'border-green-500');
+                } else if (b === btn && answer !== correctAnswers[qNum]) {
+                    b.classList.add('bg-red-500', 'text-white', 'border-red-500');
+                }
+            });
+        }
+
+        function toggleMultiAnswer(btn) {
+            btn.classList.toggle('bg-indigo-100');
+            btn.classList.toggle('border-indigo-500');
+        }
+
+        function checkMultiAnswer() {
+            const selected = document.querySelectorAll('.multi-option.bg-indigo-100');
+            const correct = ['departure', 'terminal'];
+            let isCorrect = true;
+            
+            selected.forEach(btn => {
+                if (!correct.includes(btn.dataset.value)) isCorrect = false;
+            });
+            
+            if (isCorrect && selected.length === correct.length) {
+                alert("Correct! Those are in the story! 📖");
+            } else {
+                alert("Not quite! Think about where they are in the story... 🤔");
+            }
+        }
+
+        function showStoryFeedback() {
+            document.getElementById('story-results').classList.remove('hidden');
+            document.getElementById('story-quiz').classList.add('opacity-50');
+        }
+
+        // Quiz Functions
+        function loadQuizQuestion() {
+            const container = document.getElementById('quiz-container');
+            const q = quizData[currentQuestion];
+            
+            let html = `
+                <div class="bg-white rounded-2xl p-6 shadow-lg mb-6">
+                    <p class="text-xl font-bold text-gray-800 mb-6">${currentQuestion + 1}. ${q.question}</p>
+                    <div class="space-y-3">
+            `;
+            
+            q.options.forEach((opt, idx) => {
+                html += `<button onclick="answerQuiz(${idx})" class="w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 transition font-medium">${String.fromCharCode(65 + idx)}. ${opt}</button>`;
+            });
+            
+            html += '</div></div>';
+            container.innerHTML = html;
+            
+            document.getElementById('current-q').textContent = currentQuestion + 1;
+            document.getElementById('quiz-progress').style.width = ((currentQuestion / quizData.length) * 100) + '%';
+        }
+
+        function answerQuiz(answer) {
+            const q = quizData[currentQuestion];
+            const buttons = document.querySelectorAll('#quiz-container button');
+            
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === q.correct) {
+                    btn.classList.add('bg-green-500', 'text-white', 'border-green-500');
+                } else if (idx === answer && answer !== q.correct) {
+                    btn.classList.add('bg-red-500', 'text-white', 'border-red-500');
+                }
+            });
+            
+            if (answer === q.correct) {
+                quizScore++;
+            } else {
+                missedQuestions.push(currentQuestion);
+            }
+            
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < quizData.length) {
+                    loadQuizQuestion();
+                } else {
+                    showQuizResults();
+                }
+            }, 1000);
+        }
+
+        function showQuizResults() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('quiz-results').classList.remove('hidden');
+            document.getElementById('score-display').textContent = quizScore;
+            
+            const percentage = (quizScore / quizData.length) * 100;
+            const emoji = document.getElementById('result-emoji');
+            const title = document.getElementById('result-title');
+            const message = document.getElementById('result-message');
+            
+            if (percentage >= 90) {
+                emoji.textContent = '👑';
+                title.textContent = 'Main Character Energy!';
+                message.textContent = 'Certified genius! You absolutely slayed this quiz! ✨';
+                unlockAchievement('quiz-master');
+            } else if (percentage >= 70) {
+                emoji.textContent = '🌟';
+                title.textContent = 'So Close!';
+                message.textContent = 'Great job bestie! You\'re almost there! 🚀';
+            } else {
+                emoji.textContent = '💪';
+                title.textContent = 'Study More Bestie!';
+                message.textContent = 'No worries! Review the material and try again. You\'ve got this! 📚';
+            }
+            
+            document.getElementById('quiz-progress').style.width = '100%';
+        }
+
+        function retryMissed() {
+            if (missedQuestions.length === 0) {
+                alert("You got them all right! No need to retry! 🎉");
+                return;
+            }
+            currentQuestion = missedQuestions[0];
+            missedQuestions = missedQuestions.slice(1);
+            document.getElementById('quiz-results').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            loadQuizQuestion();
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            quizScore = 0;
+            missedQuestions = [];
+            document.getElementById('quiz-results').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            loadQuizQuestion();
+        }
+
+        // Creative Project Functions
+        function insertWord(word) {
+            const editor = document.getElementById('story-editor');
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const text = editor.value;
+            editor.value = text.substring(0, start) + word + text.substring(end);
+            editor.focus();
+            editor.setSelectionRange(start + word.length, start + word.length);
+            updateWordCount();
+        }
+
+        function updateWordCount() {
+            const text = document.getElementById('story-editor').value;
+            const count = text.trim() ? text.trim().split(/\s+/).length : 0;
+            document.getElementById('word-count').textContent = count;
+        }
+
+        document.getElementById('story-editor').addEventListener('input', updateWordCount);
+
+        function saveStory() {
+            const story = document.getElementById('story-editor').value;
+            localStorage.setItem('unit6_story', story);
+            
+            const notif = document.getElementById('save-notification');
+            notif.classList.remove('hidden');
+            setTimeout(() => notif.classList.add('hidden'), 3000);
+            
+            unlockAchievement('creative');
+        }
+
+        function downloadStory() {
+            const story = document.getElementById('story-editor').value;
+            const blob = new Blob([story], {type: 'text/plain'});
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'My_Airport_Drama_Unit6.txt';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function checkRequirements() {
+            const story = document.getElementById('story-editor').value.toLowerCase();
+            const reqList = document.getElementById('req-list');
+            const reqDiv = document.getElementById('req-check');
+            
+            const checks = [
+                {test: story.split(/\s+/).length >= 8, text: "8-10 sentences (check word count)"},
+                {test: /check-in|departure|security|baggage|terminal|passport|customs|arrivals|take off|land/.test(story), text: "5+ vocab words from Unit 6"},
+                {test: /have been \w+ing/.test(story), text: "Present Perfect Progressive"},
+                {test: /just|already|yet|still/.test(story), text: "Uses just/already/yet/still"},
+                {test: story.length > 50, text: "Includes problem and solution"}
+            ];
+            
+            let html = '';
+            checks.forEach(check => {
+                const icon = check.test ? '✅' : '❌';
+                const color = check.test ? 'text-green-600' : 'text-red-600';
+                html += `<li class="${color}">${icon} ${check.text}</li>`;
+            });
+            
+            reqList.innerHTML = html;
+            reqDiv.classList.remove('hidden');
+        }
+
+        // Pomodoro Timer
+        function startPomodoro() {
+            if (isPomoRunning) return;
+            isPomoRunning = true;
+            document.getElementById('pomo-start').textContent = 'Running...';
+            
+            pomoInterval = setInterval(() => {
+                pomoTime--;
+                const mins = Math.floor(pomoTime / 60).toString().padStart(2, '0');
+                const secs = (pomoTime % 60).toString().padStart(2, '0');
+                document.getElementById('pomodoro-display').textContent = `${mins}:${secs}`;
+                
+                if (pomoTime <= 0) {
+                    clearInterval(pomoInterval);
+                    alert("Time's up! Take a 5 minute break! ☕");
+                    resetPomodoro();
+                }
+            }, 1000);
+        }
+
+        function pausePomodoro() {
+            clearInterval(pomoInterval);
+            isPomoRunning = false;
+            document.getElementById('pomo-start').textContent = 'Resume';
+        }
+
+        function resetPomodoro() {
+            clearInterval(pomoInterval);
+            isPomoRunning = false;
+            pomoTime = 25 * 60;
+            document.getElementById('pomodoro-display').textContent = '25:00';
+            document.getElementById('pomo-start').textContent = 'Start';
+        }
+
+        // Achievement System
+        function unlockAchievement(type) {
+            if (achievements.includes(type)) return;
+            
+            achievements.push(type);
+            document.getElementById('badge-count').textContent = achievements.length;
+            document.getElementById('achievement-count').classList.remove('hidden');
+            
+            const messages = {
+                'first-vocab': 'First Vocab Learned! 📚',
+                'story': 'Story Completed! 📖',
+                'grammar': 'Grammar Guru! ✨',
+                'creative': 'Creative Writer! 🎨',
+                'quiz-master': 'Quiz Master! 🎯'
+            };
+            
+            const toast = document.getElementById('achievement-toast');
+            document.getElementById('achievement-text').textContent = messages[type];
+            toast.classList.remove('hidden');
+            toast.classList.remove('translate-x-full');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => toast.classList.add('hidden'), 500);
+            }, 3000);
+        }
+
+        // Confetti Effect
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = ['#ff0', '#f0f', '#0ff', '#0f0', '#00f'][Math.floor(Math.random() * 5)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        // Toast Notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-lg z-50';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+
+        // Add shake animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
